@@ -9,24 +9,24 @@ class TodosScreen extends StatelessWidget {
 
   final List<Todo> todos = [
     Todo(
-      title: "Buy Groceries",
-      description: "Milk, Eggs, Bread, Fruits",
+      title: "Morning Exercise",
+      description: "30 minutes jogging and stretching",
     ),
     Todo(
-      title: "Study Flutter",
-      description: "Complete navigation and data passing task",
+      title: "Complete Assignment",
+      description: "Finish Flutter UI task before evening",
     ),
     Todo(
-      title: "Playing Games",
-      description: "Play Homescape for 1 hour",
+      title: "Read a Book",
+      description: "Read 20 pages of Atomic Habits",
     ),
     Todo(
-      title: "Watching Documentary",
-      description: "History of economically growth countries",
+      title: "Watch Tutorial",
+      description: "Learn state management in Flutter",
     ),
     Todo(
-      title: "Baking",
-      description: "Make a cake and pastries for the gathering",
+      title: "Family Dinner",
+      description: "Dinner with family at 8 PM",
     ),
   ];
 
@@ -36,8 +36,10 @@ class TodosScreen extends StatelessWidget {
       appBar: AppBar(
         title: Center(child: Text("Todos List")),
         backgroundColor: Colors.green,
-        titleTextStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.bold
-      ),
+        titleTextStyle: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+        ),
       ),
       body: ListView.builder(
         itemCount: todos.length,
@@ -46,7 +48,10 @@ class TodosScreen extends StatelessWidget {
 
           return ListTile(
             title: Text(todo.title),
-            titleTextStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,),
+            titleTextStyle: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
             leading: const Icon(Icons.task, color: Colors.green),
 
             onTap: () {
