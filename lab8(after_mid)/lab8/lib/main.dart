@@ -13,8 +13,6 @@ class WeatherApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Weather Lab',
-      theme: ThemeData(primarySwatch: Colors.blue),
       home: const WeatherScreen(),
     );
   }
@@ -28,87 +26,128 @@ class WeatherScreen extends StatefulWidget {
 }
 
 class _WeatherScreenState extends State<WeatherScreen> {
-  final WeatherService _weatherService = WeatherService();
+  final WeatherService _service = WeatherService();
+
   late Future<Weather> _weatherFuture;
+
+  final TextEditingController latController = TextEditingController();
+  final TextEditingController lonController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-
-    // Trigger the API call when the screen loads
-    _weatherFuture = _weatherService.fetchWeather();
+    _weatherFuture = _service.fetchWeather(51.5074, -0.1278);
   }
 
-  // Function to manually refresh data
-  void _refreshWeather() {
+  // 🔹 Challenge 1
+  void _getWeatherByCoords() {
+    final lat = double.tryParse(latController.text) ?? 0;
+    final lon = double.tryParse(lonController.text) ?? 0;
+
     setState(() {
-      _weatherFuture = _weatherService.fetchWeather();
+      _weatherFuture = _service.fetchWeather(lat, lon);
+    });
+  }
+
+  // 🔹 Challenge 2
+  void _getWeatherByCity() {
+    setState(() {
+      _weatherFuture = _service.fetchWeatherByCity(cityController.text);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Current Weather'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _refreshWeather,
-          )
-        ],
-      ),
-      body: Center(
-        child: FutureBuilder<Weather>(
-          future: _weatherFuture,
-          builder: (context, snapshot) {
+      appBar: AppBar(title: const Text("Weather App")),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
 
-            // State 1: Still loading
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            }
+            // 🔹 Latitude / Longitude input
+            TextField(
+              controller: latController,
+              decoration: const InputDecoration(labelText: "Latitude"),
+            ),
 
-            // State 2: Error occurred
-            else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            }
+            TextField(
+              controller: lonController,
+              decoration: const InputDecoration(labelText: "Longitude"),
+            ),
 
-            // State 3: Data successfully fetched
-            else if (snapshot.hasData) {
-              final weather = snapshot.data!;
+            ElevatedButton(
+              onPressed: _getWeatherByCoords,
+              child: const Text("Get by Coordinates"),
+            ),
 
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    weather.cityName,
-                    style: const TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
+            const SizedBox(height: 20),
 
-                  Text(
-                    '${weather.temperature.toStringAsFixed(1)}°C',
-                    style: const TextStyle(fontSize: 60),
-                  ),
-                  const SizedBox(height: 10),
+            // 🔹 City input
+            TextField(
+              controller: cityController,
+              decoration: const InputDecoration(labelText: "City Name"),
+            ),
 
-                  Text(
-                    weather.description.toUpperCase(),
-                    style: const TextStyle(
-                      fontSize: 24,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
-              );
-            }
+            ElevatedButton(
+              onPressed: _getWeatherByCity,
+              child: const Text("Search by City"),
+            ),
 
-            // Fallback state
-            return const Text('No data available');
-          },
+            const SizedBox(height: 30),
+
+            // 🔹 Weather Display
+            FutureBuilder<Weather>(
+              future: _weatherFuture,
+              builder: (context, snapshot) {
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+
+                if (snapshot.hasError) {
+                  return Text("Error: ${snapshot.error}");
+                }
+
+                if (snapshot.hasData) {
+                  final weather = snapshot.data!;
+
+                  return Column(
+                    children: [
+                      Text(
+                        weather.cityName,
+                        style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      // 🔹 Challenge 3 (ICON)
+                      Image.network(
+                        'https://openweathermap.org/img/wn/${weather.icon}@2x.png'
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      Text(
+                        "${weather.temperature.toStringAsFixed(1)}°C",
+                        style: const TextStyle(fontSize: 40),
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      Text(
+                        weather.description.toUpperCase(),
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                    ],
+                  );
+                }
+
+                return const Text("No data");
+              },
+            ),
+          ],
         ),
       ),
     );
