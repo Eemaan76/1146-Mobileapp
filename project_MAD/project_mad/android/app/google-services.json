@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "303769063382",
+    "project_id": "rentalpro-eb19e",
+    "storage_bucket": "rentalpro-eb19e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:303769063382:android:47a0c3c21060e3a0259e77",
+        "android_client_info": {
+          "package_name": "com.example.project_mad"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "303769063382-0me0rp6lrcp2rj9hoo14mnqq9q5abdv0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.project_mad",
+            "certificate_hash": "b2cfdfeb5ae76882cce238744cbfc24f427dd2c0"
+          }
+        },
+        {
+          "client_id": "303769063382-b55lhdmclok5hpkr83npeor9v660sfqb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlB9NnturHzPsxYLSoyWss1Z7lmWHN3lI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "303769063382-b55lhdmclok5hpkr83npeor9v660sfqb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,159 +10,110 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
+  // Theme change krny k liye
   bool isDark = false;
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        brightness: Brightness.light,
-        appBarTheme: AppBarTheme(
-          centerTitle: true,
-          titleTextStyle: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
-      ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        appBarTheme: AppBarTheme(
-          centerTitle: true,
-          titleTextStyle: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-      ),
-      themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
-      home: HomeScreen(
-        isDark: isDark,
-        onChanged: (value) {
-          setState(() {
-            isDark = value;
-          });
-        },
-      ),
-    );
-  }
-}
-
-class HomeScreen extends StatelessWidget {
-  final bool isDark;
-  final Function(bool) onChanged;
-
-  HomeScreen({required this.isDark, required this.onChanged});
-
-  final List<Map<String, dynamic>> products = [
-    {"name": "Shoes", "price": "\$50"},
-    {"name": "Watch", "price": "\$70"},
-    {"name": "Bag", "price": "\$40"},
-    {"name": "Phone", "price": "\$300"},
-    {"name": "Laptop", "price": "\$600"},
-    {"name": "Headphones", "price": "\$45"},
-    {"name": "Camera", "price": "\$250"},
-    {"name": "T-Shirt", "price": "\$20"},
+  // Schedule data
+  List<Map<String, String>> classes = [
+    {
+      "time": "8:00 - 9:30 AM",
+      "subject": "Flutter Development",
+      "room": "Room 201"
+    },
+    {
+      "time": "10:00 - 11:30 AM",
+      "subject": "Data Science",
+      "room": "Room 105"
+    },
+    {
+      "time": "12:00 - 1:30 PM",
+      "subject": "AI",
+      "room": "Room 301"
+    },
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: Row(
-          children: [
-            Icon(Icons.menu),
-            Icon(Icons.search),
+    return MaterialApp(
+
+      // Dark or light mode
+      themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
+
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text("My Schedule"),
+
+          actions: [
+            IconButton(
+              icon: Icon(
+                isDark ? Icons.light_mode : Icons.dark_mode,
+              ),
+
+              onPressed: () {
+                setState(() {
+                  isDark = !isDark;
+                });
+              },
+            )
           ],
         ),
-        title: Text('Product App'),
-      ),
-      body: Column(
-        children: [
-          SizedBox(height: 20),
-          CircleAvatar(
-            radius: 50,
-            backgroundImage: NetworkImage(
-              'https://via.placeholder.com/150',
-            ),
-          ),
-          SizedBox(height: 10),
-          Column(
-            children: [
-              Text(
-                'Ali Khan',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text('alikhan@gmail.com'),
-            ],
-          ),
-          SizedBox(height: 20),
-          Expanded(
-            child: GridView.builder(
-              padding: EdgeInsets.all(10),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: 0.8,
-              ),
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  child: Padding(
-                    padding: EdgeInsets.all(8),
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: Image.network(
-                            'https://via.placeholder.com/150',
+
+        body: Padding(
+          padding: EdgeInsets.all(16),
+
+          child: Column(
+            children: classes.map((item) {
+
+              return Column(
+                children: [
+
+                  Card(
+                    elevation: 5,
+
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+
+                          Text(
+                            item["time"]!,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(products[index]['name']),
-                            Text(products[index]['price']),
-                          ],
-                        ),
-                        SizedBox(height: 8),
-                        ElevatedButton(
-                          onPressed: () {
-                            print(products[index]['name']);
-                          },
-                          child: Text('Add to Wishlist'),
-                        ),
-                      ],
+
+                          SizedBox(height: 10),
+
+                          Text(
+                            item["subject"]!,
+                            style: TextStyle(fontSize: 16),
+                          ),
+
+                          SizedBox(height: 10),
+
+                          Text(
+                            item["room"]!,
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                );
-              },
-            ),
+
+                  SizedBox(height: 15),
+                ],
+              );
+            }).toList(),
           ),
-          Padding(
-            padding: EdgeInsets.all(12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Dark Mode'),
-                Switch(
-                  value: isDark,
-                  onChanged: onChanged,
-                ),
-              ],
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 }
-
-
